@@ -56,8 +56,9 @@ a {
 }
 
 .current-temp-icon {
-  font-size: 80px;
-  margin-right: 10px;
+  width: 100px;
+  height: 100px;
+  margin-right: 5px;
 }
 
 .degrees {
@@ -69,6 +70,7 @@ a {
 .current-temp {
   font-size: 80px;
   font-weight: 700;
+  line-height: 100px;
 }
 
 .current-details {

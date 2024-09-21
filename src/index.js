@@ -1,3 +1,22 @@
+//format day and time
+function formatDate(date) {
+  let day = date.getDay();
+  //format minutes so that even if it is between minute 1 and 9 it will show as 2 digits
+  let formattedMinute = String(date.getMinutes()).padStart(2, "0");
+  let currentTimeValue = `${date.getHours()}:${formattedMinute}`;
+  let days = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  let currentDayValue = days[day];
+  return `${currentDayValue} ${currentTimeValue}`;
+}
+
 //Get city data from form event and pass it to getCityData function
 function actionSubmit(event) {
   event.preventDefault();
@@ -18,10 +37,23 @@ function showWeather(response) {
   let city = document.querySelector("#weather-app-city");
   let temp = document.querySelector("#current-temp");
   let description = document.querySelector("#description");
+  let humidity = document.querySelector("#humidity");
+  let windSpeed = document.querySelector("#wind-speed");
+  let dateTime = new Date(response.data.time * 1000);
+  let currentTime = document.querySelector("#time");
+  let icon = document.querySelector("#icon");
+  console.log(dateTime);
 
   city.innerHTML = response.data.city;
   temp.innerHTML = Math.round(response.data.temperature.current);
   description.innerHTML = response.data.condition.description;
+  humidity.innerHTML = `${response.data.temperature.humidity}%`;
+  windSpeed.innerHTML = `${response.data.wind.speed} km/hr`;
+  currentTime.innerHTML = formatDate(dateTime);
+  icon.innerHTML = `<img
+                src="${response.data.condition.icon_url}"
+                class="current-temp-icon"
+              />`;
 }
 
 //Process form submission
