@@ -42,7 +42,6 @@ function showWeather(response) {
   let dateTime = new Date(response.data.time * 1000);
   let currentTime = document.querySelector("#time");
   let icon = document.querySelector("#icon");
-  console.log(dateTime);
 
   city.innerHTML = response.data.city;
   temp.innerHTML = Math.round(response.data.temperature.current);
