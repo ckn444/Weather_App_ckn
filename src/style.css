@@ -12,7 +12,7 @@ body {
   border-radius: 10px;
 }
 header {
-  padding: 0 0 30px 0;
+  padding: 0 0 20px 0;
 }
 
 a {
@@ -92,6 +92,7 @@ a {
   font-size: 40px;
   margin: 0;
   font-weight: 700;
+  padding-top: 5px;
 }
 .city-details {
   font-size: 20px;
