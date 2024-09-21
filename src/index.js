@@ -36,8 +36,11 @@ function showWeather(response) {
   console.log(response.data); //test only
   let city = document.querySelector("#weather-app-city");
   let temp = document.querySelector("#current-temp");
+  let degrees = document.querySelector("#degrees");
   let description = document.querySelector("#description");
+  let humidityHeading = document.querySelector("#humidity-heading");
   let humidity = document.querySelector("#humidity");
+  let windHeading = document.querySelector("#wind-heading");
   let windSpeed = document.querySelector("#wind-speed");
   let dateTime = new Date(response.data.time * 1000);
   let currentTime = document.querySelector("#time");
@@ -45,9 +48,12 @@ function showWeather(response) {
 
   city.innerHTML = response.data.city;
   temp.innerHTML = Math.round(response.data.temperature.current);
+  degrees.innerHTML = `°C`;
   description.innerHTML = response.data.condition.description;
+  humidityHeading.innerHTML = `Humidity: `;
   humidity.innerHTML = `${response.data.temperature.humidity}%`;
   windSpeed.innerHTML = `${response.data.wind.speed} km/hr`;
+  windHeading.innerHTML = `Wind: `;
   currentTime.innerHTML = formatDate(dateTime);
   icon.innerHTML = `<img
                 src="${response.data.condition.icon_url}"
