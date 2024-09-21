@@ -103,6 +103,12 @@ a {
 }
 
 .weather-forecast {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 40px;
+}
+
+.weather-forecast-day {
   border-radius: 10px;
   box-shadow: -6px -6px 10px hsla(0, 0%, 100%, 0.8),
     6px 6px 10px rgba(0, 0, 0, 0.2);
