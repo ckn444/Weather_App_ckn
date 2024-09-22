@@ -59,6 +59,40 @@ function showWeather(response) {
                 src="${response.data.condition.icon_url}"
                 class="current-temp-icon"
               />`;
+
+  getForecastData(response.data.city);
+}
+
+//forecast section processing
+
+function getForecastData(city) {
+  let apiKey = "073da528da745of5bbcaae543e06t78e";
+  let apiURL = `https://api.shecodes.io/weather/v1/forecast?lquery=${city}&key=${apiKey}&unit=metric`;
+  axios(apiURL).then(displayForecast);
+}
+
+function displayForecast(response) {
+  console.log(response);
+  let days = ["Tue", "Wed", "Thu", "Fri", "Sat"];
+  let forecastHtml = "";
+
+  days.forEach(function (day) {
+    forecastHtml =
+      forecastHtml +
+      `
+         <div class="weather-forecast-day">
+           <div class="weather-forecast-date">${day}</div>
+           <div class="weather-forecast-icon">🌧️</div>
+           <div class="weather-forecast-temps">
+             <div class="weather-forecast-temp">
+               <strong>12°</strong>
+             </div>
+             <div class="weather-forecast-temp">20°</div>
+           </div>
+         </div>`;
+  });
+  let forecast = document.querySelector("#forecast");
+  forecast.innerHTML = forecastHtml;
 }
 
 //Process form submission
