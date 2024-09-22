@@ -14,7 +14,7 @@ function formatDate(date) {
     "Saturday",
   ];
   let currentDayValue = days[day];
-  return `${currentDayValue} ${currentTimeValue}`;
+  return `${currentDayValue} at ${currentTimeValue}`;
 }
 
 //Get city data from form event and pass it to getCityData function
