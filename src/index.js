@@ -67,27 +67,32 @@ function showWeather(response) {
 
 function getForecastData(city) {
   let apiKey = "073da528da745of5bbcaae543e06t78e";
-  let apiURL = `https://api.shecodes.io/weather/v1/forecast?lquery=${city}&key=${apiKey}&unit=metric`;
+  let apiURL = `https://api.shecodes.io/weather/v1/forecast?query=${city}&key=${apiKey}&units=metric`;
   axios(apiURL).then(displayForecast);
 }
 
 function displayForecast(response) {
   console.log(response);
-  let days = ["Tue", "Wed", "Thu", "Fri", "Sat"];
+
   let forecastHtml = "";
 
-  days.forEach(function (day) {
+  response.data.daily.forEach(function (day) {
     forecastHtml =
       forecastHtml +
       `
          <div class="weather-forecast-day">
-           <div class="weather-forecast-date">${day}</div>
-           <div class="weather-forecast-icon">🌧️</div>
+           <div class="weather-forecast-date">Tues</div>
+           <div class="weather-forecast-icon">
+           <img class="weather-forecast-icon" src="${
+             day.condition.icon_url
+           }"/></div>
            <div class="weather-forecast-temps">
              <div class="weather-forecast-temp">
-               <strong>12°</strong>
+               <strong>${Math.round(day.temperature.maximum)}°</strong>
              </div>
-             <div class="weather-forecast-temp">20°</div>
+             <div class="weather-forecast-temp">${Math.round(
+               day.temperature.minimum
+             )}°</div>
            </div>
          </div>`;
   });
