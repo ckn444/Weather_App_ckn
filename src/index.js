@@ -64,12 +64,31 @@ function showWeather(response) {
 }
 
 //forecast section processing
+//Note: due to the timestamp on the retrieved data being fixed to 1am, there is a point in time where the forecast day is the same as the current day.
+//I have changed the assignment to ensure that the first day of the forecast is always "tomorrow"
 
-function formatDay(timestamp) {
-  let date = new Date(timestamp * 1000);
-  let days = ["Sun", "Mon", "Tues", "Wed", "Thu", "Fri", "Sat"];
+function formatDay(dayIndex) {
+  let days = [
+    "Sun",
+    "Mon",
+    "Tues",
+    "Wed",
+    "Thu",
+    "Fri",
+    "Sat",
+    "Sun",
+    "Mon",
+    "Tues",
+    "Wed",
+    "Thu",
+    "Fri",
+    "Sat",
+  ];
+  console.log(`this is the day index ${dayIndex}`);
 
-  return days[date.getDay()];
+  let day = days[dayIndex];
+
+  return day;
 }
 
 function getForecastData(city) {
@@ -82,29 +101,34 @@ function displayForecast(response) {
   console.log(response);
 
   let forecastHtml = "";
+  let currentDate = new Date();
+  let currentDayIndex = currentDate.getDay();
+  console.log(currentDayIndex);
 
-  response.data.daily.forEach(function (day, index) {
-    if (index < 5) {
-      forecastHtml =
-        forecastHtml +
-        `
+  for (let i = currentDayIndex + 1; i < currentDayIndex + 6; i++) {
+    console.log(i);
+    console.log(response.data.daily[i].temperature.maximum);
+    forecastHtml =
+      forecastHtml +
+      `
          <div class="weather-forecast-day">
-           <div class="weather-forecast-date">${formatDay(day.time)}</div>
+           <div class="weather-forecast-date">${formatDay(i)}</div>
            <div>
            <img class="weather-forecast-icon" src="${
-             day.condition.icon_url
+             response.data.daily[i].condition.icon_url
            }"/></div>
            <div class="weather-forecast-temps">
              <div class="weather-forecast-temp">
-               <strong>${Math.round(day.temperature.maximum)}°</strong>
+               <strong>${Math.round(
+                 response.data.daily[i].temperature.maximum
+               )}°</strong>
              </div>
              <div class="weather-forecast-temp">${Math.round(
-               day.temperature.minimum
+               response.data.daily[i].temperature.minimum
              )}°</div>
            </div>
          </div>`;
-    }
-  });
+  }
   let forecast = document.querySelector("#forecast");
   forecast.innerHTML = forecastHtml;
 }
