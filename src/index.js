@@ -14,7 +14,7 @@ function formatDate(date) {
     "Saturday",
   ];
   let currentDayValue = days[day];
-  return `${currentDayValue} ${currentTimeValue}`;
+  return `${currentDayValue} at ${currentTimeValue}`;
 }
 
 //Get city data from form event and pass it to getCityData function
@@ -59,6 +59,78 @@ function showWeather(response) {
                 src="${response.data.condition.icon_url}"
                 class="current-temp-icon"
               />`;
+
+  getForecastData(response.data.city);
+}
+
+//forecast section processing
+//Note: due to the timestamp on the retrieved data being fixed to 1am, there is a point in time where the forecast day is the same as the current day.
+//I have changed the assignment to ensure that the first day of the forecast is always "tomorrow"
+
+function formatDay(dayIndex) {
+  let days = [
+    "Sun",
+    "Mon",
+    "Tues",
+    "Wed",
+    "Thu",
+    "Fri",
+    "Sat",
+    "Sun",
+    "Mon",
+    "Tues",
+    "Wed",
+    "Thu",
+    "Fri",
+    "Sat",
+  ];
+  console.log(`this is the day index ${dayIndex}`);
+
+  let day = days[dayIndex];
+
+  return day;
+}
+
+function getForecastData(city) {
+  let apiKey = "073da528da745of5bbcaae543e06t78e";
+  let apiURL = `https://api.shecodes.io/weather/v1/forecast?query=${city}&key=${apiKey}&units=metric`;
+  axios(apiURL).then(displayForecast);
+}
+
+function displayForecast(response) {
+  console.log(response);
+
+  let forecastHtml = "";
+  let currentDate = new Date();
+  let currentDayIndex = currentDate.getDay();
+  console.log(currentDayIndex);
+
+  for (let i = currentDayIndex + 1; i < currentDayIndex + 6; i++) {
+    console.log(i);
+    console.log(response.data.daily[i].temperature.maximum);
+    forecastHtml =
+      forecastHtml +
+      `
+         <div class="weather-forecast-day">
+           <div class="weather-forecast-date">${formatDay(i)}</div>
+           <div>
+           <img class="weather-forecast-icon" src="${
+             response.data.daily[i].condition.icon_url
+           }"/></div>
+           <div class="weather-forecast-temps">
+             <div class="weather-forecast-temp">
+               <strong>${Math.round(
+                 response.data.daily[i].temperature.maximum
+               )}°</strong>
+             </div>
+             <div class="weather-forecast-temp">${Math.round(
+               response.data.daily[i].temperature.minimum
+             )}°</div>
+           </div>
+         </div>`;
+  }
+  let forecast = document.querySelector("#forecast");
+  forecast.innerHTML = forecastHtml;
 }
 
 //Process form submission
