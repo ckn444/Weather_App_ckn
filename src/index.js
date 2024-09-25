@@ -33,7 +33,6 @@ function getCityData(city) {
 
 //Use the provided city data to populate city and current weather
 function showWeather(response) {
-  console.log(response.data); //test only
   let city = document.querySelector("#weather-app-city");
   let temp = document.querySelector("#current-temp");
   let degrees = document.querySelector("#degrees");
@@ -64,21 +63,23 @@ function showWeather(response) {
 }
 
 //forecast section processing
-//Note: due to the timestamp on the retrieved data being fixed to 1am, there is a point in time where the forecast day is the same as the current day.
-//I have changed the assignment to ensure that the first day of the forecast is always "tomorrow"
 
+//Note: due to the timestamp on the retrieved data being a fixed hour, there is a point in time where the first forecast day is the same as the current day.
+//I written the code to ensure that the first day of the forecast is always "tomorrow"
+
+//additional days added to the array so it will never run out of days
 function formatDay(dayIndex) {
   let days = [
     "Sun",
     "Mon",
-    "Tues",
+    "Tue",
     "Wed",
     "Thu",
     "Fri",
     "Sat",
     "Sun",
     "Mon",
-    "Tues",
+    "Tue",
     "Wed",
     "Thu",
     "Fri",
@@ -98,21 +99,35 @@ function getForecastData(city) {
 }
 
 function displayForecast(response) {
-  console.log(response);
-
-  let forecastHtml = "";
+  //get index of today for comparison and format it
   let currentDate = new Date();
   let currentDayIndex = currentDate.getDay();
-  console.log(currentDayIndex);
+  let currentDay = formatDay(currentDayIndex);
 
-  for (let i = currentDayIndex + 1; i < currentDayIndex + 6; i++) {
-    console.log(i);
-    console.log(response.data.daily[i].temperature.maximum);
+  //get index of the day retrieved by the api call and format it
+  let responseDate = new Date(response.data.daily[0].time * 1000);
+  let responseDay = formatDay(responseDate.getDay());
+
+  //compare today to the day received from the api call
+  //This ensures if, due to the timestamp on the api call, the first day of the forecast
+  //is the same as the current day, the display will still show the first day of the forecast as "tomorrow"
+  let offset;
+  if (responseDay === currentDay) {
+    offset = 1;
+  } else {
+    offset = 0;
+  }
+  //loop to populate forecast section
+  let forecastHtml = "";
+  for (let i = offset; i <= offset + 4; i++) {
+    let forecastDate = new Date(response.data.daily[i].time * 1000);
+
     forecastHtml =
       forecastHtml +
       `
          <div class="weather-forecast-day">
-           <div class="weather-forecast-date">${formatDay(i)}</div>
+           <div class="weather-forecast-date">
+           ${formatDay(forecastDate.getDay())}</div>
            <div>
            <img class="weather-forecast-icon" src="${
              response.data.daily[i].condition.icon_url
